@@ -2,18 +2,26 @@ package com.github.wrightm.tutorial.algorithms.unionfind;
 
 import java.util.Scanner;
 
-public class UnionFind {
+/**
+ * 
+ * The quick find algorithm executes at least MN instructions to solve a connectivity problem
+ * with N objects that involves M union operations.
+ * 
+ * @author wrightm
+ *
+ */
+public class QuickFind {
 
 	private int id[];
 	
-	public UnionFind(final int numberOfNodes) {
+	public QuickFind(final int numberOfNodes) {
 		id = new int[numberOfNodes];
 		for (int i = 0; i < numberOfNodes ; i++) {
 			id[i] = i; 
 		}
 	}
 	
-	// Constant
+	// Constant 0(1)
 	public boolean connected(final int p, final int q){
 		return id[p] == id[q];
 	}
@@ -39,7 +47,7 @@ public class UnionFind {
 	
 	public static void main(String[] args) { 
 		
-		final UnionFind unionFind = new UnionFind(10);
+		final QuickFind unionFind = new QuickFind(10);
 		final Scanner input = new Scanner(System.in);
 		while(input.hasNextInt()){ 
 			final int p = input.nextInt(), q = input.nextInt();
