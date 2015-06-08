@@ -1,24 +1,26 @@
 package com.github.wrightm.tutorial.algorithms.unionfind;
 
-import java.util.Random;
 import java.util.Scanner;
 
 import com.github.wrightm.tutorial.algorithms.Helpers;
 
 /**
- *  For M pairs > N objects. The quick union algorithm could take more than MN / 2 instructions to solve a connectivity problem.
- * @author wrightm
- *
- */
-public class QuickUnion {
+*  For M pairs and N objects. The quick union weight algorithm takes at worst MLogN instructions to solve a connectivity problem.
+* @author wrightm
+*
+*/
+public class QuickUnionWeight {
 
 	private final int id[];
+	private final int sz[];
 	
-	public QuickUnion(final int numberOfNodes){
+	public QuickUnionWeight(final int numberOfNodes){
 		id = new int[numberOfNodes];
+		sz = new int[numberOfNodes];
 		for (int i = 0; i < numberOfNodes ; i++) {
-			id[i] = i; 
-		}
+			id[i] = i;
+			sz[i] = 1;
+		}	
 	}
 	
 	/**
@@ -39,7 +41,14 @@ public class QuickUnion {
 	}
 	
 	public void union(final int p, final int q){
-		id[p] = q;
+		if(sz[p] < sz[q]){
+			id[p] = q;
+			sz[q] += sz[p];
+		}
+		else {
+			id[q] = p;
+			sz[p] += sz[q];
+		}
 	}
 	
 	public String convertIdToString(){
@@ -50,30 +59,17 @@ public class QuickUnion {
 		return idString;
 	}
 	
-	public void quickUnionScanner(){
-		
-		QuickUnion quickUnion = new QuickUnion(10);
-		
-		final Scanner input = new Scanner(System.in);
-		while(input.hasNextInt()){ 
-			final int p = input.nextInt(), q = input.nextInt();
-			int pid = quickUnion.findID(p) , qid = quickUnion.findID(q);
-			
-			if(quickUnion.connected(pid, qid)){
-				System.out.println("p "+ p + " and q " + q + " are connected");
-				System.out.println("current view of id array: " + quickUnion.convertIdToString());
-				continue;
-			}
-			System.out.println("p "+ p + " and q " + q + " are not connected");
-			quickUnion.union(pid, qid);
-			System.out.println("current view of id array: " + quickUnion.convertIdToString());
+	public String convertSizeArrayToString(){
+		String szString = "";
+		for(int i = 0; i < id.length; ++i){
+			szString += sz[i] + " ";
 		}
-		input.close();
+		return szString;
 	}
 	
 	public static void quickUnionRandomSample(){
-	
-		QuickUnion quickUnion = new QuickUnion(10);
+		
+		QuickUnionWeight quickUnion = new QuickUnionWeight(10);
 		final int sampleSize = 1000000;
 		int[][] sample = Helpers.sample(sampleSize);
 		for(int element = 0; element < sampleSize-1; ++element){
@@ -91,6 +87,30 @@ public class QuickUnion {
 			final String sid = quickUnion.convertIdToString();
 			System.out.println("current view of id array after union: " + quickUnion.convertIdToString());
 		}
+	}
+	
+	public void quickUnionScanner(){
+		QuickUnionWeight quickUnion = new QuickUnionWeight(10);
+		
+		final Scanner input = new Scanner(System.in);
+		while(input.hasNextInt()){ 
+			final int p = input.nextInt(), q = input.nextInt();
+			int pid = quickUnion.findID(p) , qid = quickUnion.findID(q);
+			
+			if(quickUnion.connected(pid, qid)){
+				System.out.println("p "+ p + " and q " + q + " are connected");
+				System.out.println("current view of id array: " + quickUnion.convertIdToString());
+				continue;
+			}
+			System.out.println("p "+ p + " and q " + q + " are not connected");
+			System.out.println("current view of id array: " + quickUnion.convertIdToString());
+			System.out.println("current view of sz array: " + quickUnion.convertSizeArrayToString());
+			quickUnion.union(pid, qid);
+			final String sid = quickUnion.convertIdToString();
+			System.out.println("current view of id array after union: " + quickUnion.convertIdToString());
+			System.out.println("current view of sz array after union: " + quickUnion.convertSizeArrayToString());
+		}
+		input.close();
 	}
 	
 	public static void main(String args[]){
