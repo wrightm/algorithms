@@ -1,6 +1,5 @@
 package com.github.wrightm.tutorial.algorithms.unionfind;
 
-import java.util.Random;
 import java.util.Scanner;
 
 import com.github.wrightm.tutorial.algorithms.Helpers;

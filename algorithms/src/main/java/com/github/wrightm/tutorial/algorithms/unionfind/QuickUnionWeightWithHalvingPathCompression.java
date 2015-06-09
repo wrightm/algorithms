@@ -4,17 +4,12 @@ import java.util.Scanner;
 
 import com.github.wrightm.tutorial.algorithms.Helpers;
 
-/**
-*  For M pairs and N objects. The quick union weight algorithm takes at worst MLogN instructions to solve a connectivity problem.
-* @author wrightm
-*
-*/
-public class QuickUnionWeight {
-
+public class QuickUnionWeightWithHalvingPathCompression {
+	
 	private final int id[];
 	private final int sz[];
 	
-	public QuickUnionWeight(final int numberOfNodes){
+	public QuickUnionWeightWithHalvingPathCompression(final int numberOfNodes){
 		id = new int[numberOfNodes];
 		sz = new int[numberOfNodes];
 		for (int i = 0; i < numberOfNodes ; i++) {
@@ -32,7 +27,9 @@ public class QuickUnionWeight {
 	 */
 	public int findID(final int value){
 		int i;
-		for(i = value; i != id[i]; i = id[i] );
+		for(i = value; i != id[i]; i = id[i] ){
+			id[i] = id[id[i]];
+		}
 		return i;
 	}
 	
@@ -78,7 +75,7 @@ public class QuickUnionWeight {
 	
 	public static void quickUnionRandomSample(){
 		
-		QuickUnionWeight quickUnion = new QuickUnionWeight(10);
+		QuickUnionWeightWithHalvingPathCompression quickUnion = new QuickUnionWeightWithHalvingPathCompression(10);
 		int count = 0;
 		
 		while(!quickUnion.allNodesAreConnected()){
@@ -104,7 +101,7 @@ public class QuickUnionWeight {
 	}
 	
 	public static void quickUnionScanner(){
-		QuickUnionWeight quickUnion = new QuickUnionWeight(10);
+		QuickUnionWeightWithHalvingPathCompression quickUnion = new QuickUnionWeightWithHalvingPathCompression(10);
 		
 		final Scanner input = new Scanner(System.in);
 		while(input.hasNextInt()){ 
@@ -131,4 +128,6 @@ public class QuickUnionWeight {
 		//quickUnionRandomSample();
 		quickUnionScanner();
 	}
+	
+
 }
